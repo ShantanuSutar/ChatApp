@@ -8,7 +8,12 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import Message from "./Components/Message";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+} from "firebase/auth";
 import { app } from "./firebase";
 
 const auth = getAuth(app);
@@ -20,6 +25,12 @@ const loginHandler = () => {
 
 function App() {
   const [user, setUser] = useState(false);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (data) => {
+      setUser(data);
+    });
+  });
 
   return (
     <Box bg={"red.50"}>
@@ -45,7 +56,9 @@ function App() {
         </Container>
       ) : (
         <VStack justifyContent={"center"} h="100vh">
-          <Button>Sign in with Google</Button>
+          <Button onClick={loginHandler} colorScheme={"purple"}>
+            Sign in with Google
+          </Button>
         </VStack>
       )}
     </Box>
