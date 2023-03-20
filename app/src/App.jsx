@@ -1,14 +1,32 @@
-import { Box, Button, Container, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  HStack,
+  Input,
+  VStack,
+} from "@chakra-ui/react";
 
+import Message from "./Components/Message";
 function App() {
   return (
     <Box bg={"red.50"}>
       <Container height={"100vh"} bg={"white"}>
-        <VStack h={"full"} bg={"telegram.100"}>
+        <VStack h={"full"} padding="4">
           <Button colorScheme={"red"} w={"full"}>
             Logout
           </Button>
-          <VStack bg={"purple.100"}></VStack>
+          <VStack h={"full"} w="full">
+            <Message text="Sample Message" />
+          </VStack>
+          <form style={{ width: "100%" }} action="">
+            <HStack>
+              <Input placeholder="Enter a message..." />
+              <Button colorScheme={"purple"} type="submit">
+                Send
+              </Button>
+            </HStack>
+          </form>
         </VStack>
       </Container>
     </Box>
