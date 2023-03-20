@@ -19,15 +19,6 @@ function App() {
           <VStack h={"full"} w="full" overflowY={"auto"}>
             <Message text="Sample Message" />
             <Message user="me" text="Sample Message" />
-            <Message text="Sample Message" />
-            <Message user="me" text="Sample Message" />
-            <Message text="Sample Message" />
-            <Message user="me" text="Sample Message" />
-            <Message user="me" text="Sample Message" />
-            <Message text="Sample Message" />
-            <Message text="Sample Message" />
-
-            <Message text="Sample Message" />
           </VStack>
           <form style={{ width: "100%" }} action="">
             <HStack>
