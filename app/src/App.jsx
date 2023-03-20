@@ -13,6 +13,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
 import { app } from "./firebase";
 
@@ -23,21 +24,29 @@ const loginHandler = () => {
   signInWithPopup(auth, provider);
 };
 
+const logoutHandler = () => signOut(auth);
+
 function App() {
   const [user, setUser] = useState(false);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (data) => {
-      setUser(data);
-    });
-  });
+    const unsbscribe = () => {
+      onAuthStateChanged(auth, (data) => {
+        setUser(data);
+      });
+    };
+
+    return () => {
+      unsbscribe();
+    };
+  }, []);
 
   return (
     <Box bg={"red.50"}>
       {user ? (
         <Container height={"100vh"} bg={"white"}>
           <VStack h={"full"} padding="4">
-            <Button colorScheme={"red"} w={"full"}>
+            <Button onClick={logoutHandler} colorScheme={"red"} w={"full"}>
               Logout
             </Button>
             <VStack h={"full"} w="full" overflowY={"auto"}>
