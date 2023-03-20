@@ -5,7 +5,7 @@ const Message = ({ text, uri, user = "other" }) => {
   return (
     <HStack
       alignSelf={user === "me" ? "flex-end" : "flex-start"}
-      bg={"gray.300"}
+      bg={"gray.200"}
       paddingX={user === "me" ? "4" : "2"}
       paddingY={2}
       borderRadius={"base"}

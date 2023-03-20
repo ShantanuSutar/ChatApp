@@ -16,9 +16,17 @@ function App() {
           <Button colorScheme={"red"} w={"full"}>
             Logout
           </Button>
-          <VStack h={"full"} w="full">
+          <VStack h={"full"} w="full" overflowY={"auto"}>
             <Message text="Sample Message" />
             <Message user="me" text="Sample Message" />
+            <Message text="Sample Message" />
+            <Message user="me" text="Sample Message" />
+            <Message text="Sample Message" />
+            <Message user="me" text="Sample Message" />
+            <Message user="me" text="Sample Message" />
+            <Message text="Sample Message" />
+            <Message text="Sample Message" />
+
             <Message text="Sample Message" />
           </VStack>
           <form style={{ width: "100%" }} action="">
