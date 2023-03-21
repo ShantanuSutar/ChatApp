@@ -4,7 +4,6 @@ import {
   getFirestore,
   addDoc,
   collection,
-  Firestore,
   serverTimestamp,
   onSnapshot,
   query,
@@ -27,7 +26,6 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
-import { async } from "@firebase/util";
 
 const auth = getAuth(app);
 const db = getFirestore(app);
