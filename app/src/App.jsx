@@ -6,6 +6,7 @@ import {
   collection,
   Firestore,
   serverTimestamp,
+  onSnapshot,
 } from "firebase/firestore";
 
 import {
@@ -39,6 +40,7 @@ const logoutHandler = () => signOut(auth);
 function App() {
   const [user, setUser] = useState(false);
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
 
   const submitHandler = async (e) => {
     e.preventDefault(); // To stop the page from reloading
@@ -47,7 +49,7 @@ function App() {
       await addDoc(collection(db, "Messages"), {
         text: message, // Message to be displayed
         uid: user.uid, // user id
-        uri: user.photoURL, //url
+        uri: user.photoURL, //user account photo
         createdAt: serverTimestamp(), // Date and time
       });
 
@@ -64,8 +66,19 @@ function App() {
       });
     };
 
+    const unsubscribeForMessage = () => {
+      onSnapshot(collection(db, "Messages"), (snap) => {
+        setMessages(
+          snap.docs.map((item) => {
+            const id = item.id;
+            return { id, ...item.data() }; // returning id plus data in single object
+          })
+        );
+      });
+    };
     return () => {
       unsbscribe();
+      unsubscribeForMessage();
     };
   }, []);
 
@@ -78,8 +91,14 @@ function App() {
               Logout
             </Button>
             <VStack h={"full"} w="full" overflowY={"auto"}>
-              <Message text="Sample Message" />
-              <Message user="me" text="Sample Message" />
+              {messages.map((item) => (
+                <Message
+                  key={item.id}
+                  user={item.uid === user.id ? "me" : "other"}
+                  text={item.text}
+                  uri={item.uri}
+                />
+              ))}
             </VStack>
             <form onSubmit={submitHandler} style={{ width: "100%" }} action="">
               <HStack>
