@@ -1,3 +1,13 @@
+import { useState, useEffect } from "react";
+import { app } from "./firebase";
+import {
+  getFirestore,
+  addDoc,
+  collection,
+  Firestore,
+  serverTimestamp,
+} from "firebase/firestore";
+
 import {
   Box,
   Button,
@@ -6,7 +16,6 @@ import {
   Input,
   VStack,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
 import Message from "./Components/Message";
 import {
   getAuth,
@@ -15,9 +24,10 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
-import { app } from "./firebase";
+import { async } from "@firebase/util";
 
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 const loginHandler = () => {
   const provider = new GoogleAuthProvider();
@@ -28,6 +38,21 @@ const logoutHandler = () => signOut(auth);
 
 function App() {
   const [user, setUser] = useState(false);
+
+  const submitHandler = async (e) => {
+    e.preventDefault(); // To stop the page from reloading
+
+    try {
+      await addDoc(collection(db, "Messages"), {
+        text: "Adsd", // Message to be displayed
+        uid: user.uid, // user id
+        uri: user.photoURL, //url
+        createdAt: serverTimestamp(), // Date and time
+      });
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   useEffect(() => {
     const unsbscribe = () => {
@@ -53,7 +78,7 @@ function App() {
               <Message text="Sample Message" />
               <Message user="me" text="Sample Message" />
             </VStack>
-            <form style={{ width: "100%" }} action="">
+            <form onSubmit={submitHandler} style={{ width: "100%" }} action="">
               <HStack>
                 <Input placeholder="Enter a message..." />
                 <Button colorScheme={"purple"} type="submit">
