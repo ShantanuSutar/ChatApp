@@ -38,17 +38,20 @@ const logoutHandler = () => signOut(auth);
 
 function App() {
   const [user, setUser] = useState(false);
+  const [message, setMessage] = useState("");
 
   const submitHandler = async (e) => {
     e.preventDefault(); // To stop the page from reloading
 
     try {
       await addDoc(collection(db, "Messages"), {
-        text: "Adsd", // Message to be displayed
+        text: message, // Message to be displayed
         uid: user.uid, // user id
         uri: user.photoURL, //url
         createdAt: serverTimestamp(), // Date and time
       });
+
+      setMessage("");
     } catch (error) {
       alert(error);
     }
@@ -80,7 +83,11 @@ function App() {
             </VStack>
             <form onSubmit={submitHandler} style={{ width: "100%" }} action="">
               <HStack>
-                <Input placeholder="Enter a message..." />
+                <Input
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Enter a message..."
+                />
                 <Button colorScheme={"purple"} type="submit">
                   Send
                 </Button>
