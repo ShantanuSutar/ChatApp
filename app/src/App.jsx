@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { app } from "./firebase";
 import {
   getFirestore,
@@ -40,16 +40,17 @@ const loginHandler = () => {
 const logoutHandler = () => signOut(auth);
 
 function App() {
-  const q = query(collection(db, "Messages"), orderBy("createdAt", "asc")); //Displaying new message at last
-
   const [user, setUser] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+
+  const divForScroll = useRef(null);
 
   const submitHandler = async (e) => {
     e.preventDefault(); // To stop the page from reloading
 
     try {
+      setMessage("");
       await addDoc(collection(db, "Messages"), {
         text: message, // Message to be displayed
         uid: user.uid, // user id
@@ -57,13 +58,15 @@ function App() {
         createdAt: serverTimestamp(), // Date and time
       });
 
-      setMessage("");
+      divForScroll.current.scrollIntoView({ behavior: "smooth" });
     } catch (error) {
       alert(error);
     }
   };
 
   useEffect(() => {
+    const q = query(collection(db, "Messages"), orderBy("createdAt", "asc")); //Displaying new message at last
+
     const unsbscribe = () => {
       onAuthStateChanged(auth, (data) => {
         setUser(data);
@@ -98,12 +101,14 @@ function App() {
               {messages.map((item) => (
                 <Message
                   key={item.id}
-                  user={item.uid === user.id ? "me" : "other"}
+                  user={item.uid === user.uid ? "me" : "other"}
                   text={item.text}
                   uri={item.uri}
                 />
               ))}
+              <div ref={divForScroll}></div>
             </VStack>
+
             <form onSubmit={submitHandler} style={{ width: "100%" }} action="">
               <HStack>
                 <Input
