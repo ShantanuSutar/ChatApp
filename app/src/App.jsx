@@ -97,7 +97,16 @@ function App() {
             <Button onClick={logoutHandler} colorScheme={"red"} w={"full"}>
               Logout
             </Button>
-            <VStack h={"full"} w="full" overflowY={"auto"}>
+            <VStack
+              h={"full"}
+              w="full"
+              overflowY={"auto"}
+              css={{
+                "&::-webkit-scrollbar": {
+                  display: "none",
+                }, // Hiding Scrollbar
+              }}
+            >
               {messages.map((item) => (
                 <Message
                   key={item.id}
