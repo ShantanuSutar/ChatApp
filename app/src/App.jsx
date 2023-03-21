@@ -7,6 +7,8 @@ import {
   Firestore,
   serverTimestamp,
   onSnapshot,
+  query,
+  orderBy,
 } from "firebase/firestore";
 
 import {
@@ -38,6 +40,8 @@ const loginHandler = () => {
 const logoutHandler = () => signOut(auth);
 
 function App() {
+  const q = query(collection(db, "Messages"), orderBy("createdAt", "asc")); //Displaying new message at last
+
   const [user, setUser] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -67,7 +71,7 @@ function App() {
     };
 
     const unsubscribeForMessage = () => {
-      onSnapshot(collection(db, "Messages"), (snap) => {
+      onSnapshot(q, (snap) => {
         setMessages(
           snap.docs.map((item) => {
             const id = item.id;
